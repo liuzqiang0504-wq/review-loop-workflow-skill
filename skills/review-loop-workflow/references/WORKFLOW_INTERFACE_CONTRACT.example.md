@@ -9,6 +9,7 @@
 - `candidate_literature.csv`
 - `download_manifest.csv`
 - `02_search_log.md`
+- `literature_quantity_gate.md`
 
 `download_manifest.csv` 必须至少包含：
 
@@ -19,8 +20,20 @@
 | title | 文献题名 |
 | doi | DOI |
 | url | 原文链接 |
+| relevance_tier | core / high / medium / boundary / background |
+| search_pass | user_supplied / initial / broadening |
+| inclusion_reason | 纳入该文献的简短理由 |
 | download_status | not_downloaded / downloaded / unavailable |
 | local_file_path | 下载后的本地路径 |
+
+`literature_quantity_gate.md` 必须记录：
+
+- 用户提供的文献数量，如果有；
+- 第一轮筛选后保留的候选文献数量；
+- 是否低于默认阈值 50 篇；
+- 如果用户提供文献少于 50 篇，是否已询问是否需要更充分检索；
+- 如果 specialist literature-search 后仍少于 50 篇，是否已降低一档相关性阈值并做扩展检索；
+- 扩展检索的规则、最终候选文献数量，以及仍少于 50 篇时的饱和或范围例外说明。
 
 ## 人工下载 -> Part 2
 
@@ -83,4 +96,3 @@
 
 - `score >= 85`：输出最终版本。
 - `score < 85`：根据最低分维度回退到 Part 1-5。
-

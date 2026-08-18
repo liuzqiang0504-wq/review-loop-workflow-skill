@@ -20,7 +20,9 @@ flowchart TD
 
 ### 目标
 
-使用文献调研类 skill 检索大量相关文献，完成初筛、优先级排序，并把需要你下载的文献整理成清单。
+使用文献调研类 skill 检索大量相关文献，完成初筛、优先级排序、文献数量闸门检查，并把需要你下载的文献整理成清单。
+
+默认完整综述文献池阈值为 50 篇。如果用户提供的文献少于 50 篇，进入全文处理前必须先询问是否需要更充分检索。如果 specialist literature-search 第一轮保留候选文献少于 50 篇，必须降低一档相关性阈值并进行扩展检索，除非已经记录明确的饱和或范围例外。
 
 ### 推荐技能
 
@@ -43,6 +45,7 @@ flowchart TD
 - `part1_literature_search/search_plan.md`
 - `part1_literature_search/candidate_literature.csv`
 - `part1_literature_search/download_manifest.csv`
+- `part1_literature_search/literature_quantity_gate.md`
 - `02_search_log.md`
 
 ### 人工介入点
@@ -53,6 +56,7 @@ flowchart TD
 
 - 检索策略和日期已记录。
 - 候选文献按优先级排序。
+- 文献数量闸门已完成：若少于 50 篇，已询问用户、扩展检索或记录饱和/范围例外。
 - 下载清单中核心文献的全文路径已填写。
 
 ## Part 2：全文处理与知识库
@@ -233,4 +237,3 @@ flowchart TD
 - `85-89`：可输出最终版本，但建议记录残余风险。
 - `75-84`：不输出最终版本，回到 Part 5 定向修改。
 - `< 75`：回到 Part 4 重新模拟审稿，必要时回到 Part 2 补知识库。
-

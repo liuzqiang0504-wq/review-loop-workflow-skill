@@ -1,7 +1,7 @@
 ---
 name: review-loop-workflow
 description: Run a disciplined literature-review loop for planning, searching, downloading handoff, PDF processing, knowledge-base construction, manuscript drafting, mock peer review, targeted revision, final scoring, and Word/figure output. Use when the user asks to create, run, resume, audit, or deploy a review workflow, especially Chinese requests such as 综述 loop、综述工作流、文献调研到写作闭环、模拟审稿、85分闸门、最终输出 Word.
-version: 1.0.0
+version: 1.1.0
 author: local-codex
 ---
 
@@ -28,6 +28,38 @@ If an expected specialist skill is unavailable, state that clearly and either:
 
 Never fabricate literature, DOI metadata, PDF-derived facts, reviewer comments, scores, or claim-evidence support.
 
+## Literature Quantity Gate
+
+Treat 50 papers as the default minimum evidence-pool target for a full review manuscript. This is a workflow quality gate, not a guarantee that 50 papers is always sufficient.
+
+### Trigger A: User-Provided Literature
+
+At intake, count the user's provided literature records/PDFs whenever possible.
+
+If the user-provided corpus is fewer than 50 papers, pause before Part 2 and ask:
+
+```text
+当前提供的文献数量为 N 篇，少于默认阈值 50 篇。是否需要先进入 Part 1，调用文献检索类 specialist skill 做更充分的文献检索调研？
+```
+
+If the user agrees, run Part 1 before PDF processing. If the user declines, continue only after recording `literature_quantity_risk=accepted_by_user` in the workflow dashboard and mark the manuscript scope as limited-corpus or narrative review scope.
+
+### Trigger B: Specialist Literature Search
+
+During Part 1, after deduplication and initial relevance screening, count the retained candidate papers.
+
+If the retained count is fewer than 50, the literature-search stage must run a broader second-pass search before declaring the search complete. The second pass should lower the relevance threshold by one controlled level, for example:
+
+- strict/core relevance -> high plus medium relevance
+- title-only matching -> title/abstract matching
+- exact phrase matching -> synonyms, acronyms, target aliases, and related mechanism terms
+- narrow disease/virus/compound filters -> adjacent models, related viral families, preclinical/clinical translation, or mechanism-adjacent literature
+- recent-only window -> wider historical window
+
+Do not broaden into irrelevant literature. Each broadened candidate must declare `relevance_tier`, `search_pass=broadening`, and `inclusion_reason`.
+
+Stop broadening when the retained candidate pool reaches at least 50 papers, or when a documented saturation condition is reached. Acceptable saturation conditions include genuinely rare topics, very new fields, explicitly narrow mini-review scope, or repeated database searches yielding no additional relevant papers. Document the reason in `literature_quantity_gate.md`.
+
 ## Stage Router
 
 Use this table to select specialist skills.
@@ -35,7 +67,7 @@ Use this table to select specialist skills.
 | Stage | Purpose | Required or Preferred Skills | Main Outputs |
 |---|---|---|---|
 | Part 0 Scope | Define topic, review type, audience, inclusion/exclusion criteria | `academic-writing`, `literature-review`, `markdown-mermaid-writing` | `00_dashboard.md`, `01_scope_protocol.md` |
-| Part 1 Literature Search | Search, screen, rank, and prepare download handoff | `literature-search`, `pubmed-search`, `paper-lookup`, `nature-academic-search`, `deep-research` | `search_plan.md`, `candidate_literature.csv`, `download_manifest.csv`, `02_search_log.md` |
+| Part 1 Literature Search | Search, screen, rank, run the literature quantity gate, and prepare download handoff | `literature-search`, `pubmed-search`, `paper-lookup`, `nature-academic-search`, `deep-research` | `search_plan.md`, `candidate_literature.csv`, `download_manifest.csv`, `02_search_log.md`, `literature_quantity_gate.md` |
 | Human Download Handoff | User downloads PDFs/full texts and fills local paths | no specialist skill required, but preserve manifest contract | updated `download_manifest.csv` |
 | Part 2 PDF Processing and Knowledge Base | Read downloaded papers, extract evidence, build claim map | `pdf`, `pdf-processing`, `markitdown`, `nature-reader`, `literature-review`, `citation-management` | `knowledge_base_index.csv`, paper notes, `claims_evidence_map.csv`, `05_theme_synthesis.md` |
 | Part 3 Drafting | Draft manuscript from theme synthesis and evidence map | `nature-writing`, `nature-citation`, `nature-polishing`, `academic-writing`, `scientific-writing` | `section_plan.md`, `terminology_ledger.csv`, `06_manuscript_draft.md` |
@@ -80,6 +112,7 @@ Must output:
 - `candidate_literature.csv`
 - `download_manifest.csv`
 - `02_search_log.md`
+- `literature_quantity_gate.md`
 
 `download_manifest.csv` must include:
 
@@ -90,8 +123,20 @@ Must output:
 | title | title |
 | doi | DOI |
 | url | source URL |
+| relevance_tier | core / high / medium / boundary / background |
+| search_pass | user_supplied / initial / broadening |
+| inclusion_reason | short reason this paper belongs in the evidence pool |
 | download_status | not_downloaded / downloaded / unavailable |
 | local_file_path | path after user downloads full text |
+
+`literature_quantity_gate.md` must include:
+
+- user-provided paper count, if any;
+- retained candidate count after first-pass screening;
+- whether the count is below 50;
+- whether the user chose broader search or accepted limited-corpus risk;
+- broadening rules used by nested literature-search skills;
+- final retained candidate count and saturation explanation, if still below 50.
 
 ### Human Download -> Part 2
 

@@ -47,6 +47,16 @@ At each stage, begin with:
 进入下一阶段的检查标准：...
 ```
 
+## Literature Quantity Gate
+
+For a full review manuscript, use 50 papers as the default minimum evidence-pool target.
+
+If the user provides fewer than 50 papers, pause before PDF processing and ask whether they want a more comprehensive literature search first.
+
+If a nested literature-search specialist skill returns fewer than 50 retained candidate papers after first-pass screening, run a broader second-pass search before closing Part 1. Lower relevance only one controlled level at a time, document the broadening rules, and label broadened papers with `relevance_tier`, `search_pass=broadening`, and `inclusion_reason`.
+
+If fewer than 50 papers remain after broadening, continue only with a documented saturation or scope exception.
+
 ## Common Fallbacks
 
 If a specialist skill is unavailable:

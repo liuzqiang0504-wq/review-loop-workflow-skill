@@ -14,6 +14,10 @@ Use this scaffold when creating a new literature-review project.
 - Target journal or audience:
 - Language:
 - Final output: Markdown / Word / figures / tables / scorecard
+- Literature quantity threshold: 50 papers
+- User-provided literature count:
+- Literature quantity gate decision: not_checked / broader_search_requested / limited_corpus_risk_accepted / saturation_documented
+- Search broadening status: not_needed / pending / completed
 
 ## Current Stage
 
@@ -75,7 +79,23 @@ Topics that may be discussed only as context:
 ## download_manifest.csv
 
 ```csv
-id,priority,title,doi,url,download_status,local_file_path,notes
+id,priority,title,doi,url,relevance_tier,search_pass,inclusion_reason,download_status,local_file_path,notes
+```
+
+## literature_quantity_gate.md
+
+```markdown
+# Literature Quantity Gate
+
+- Default threshold for full review: 50 papers
+- User-provided paper count:
+- Is user-provided count below 50:
+- User decision if below 50:
+- First-pass retained candidate count:
+- Is first-pass count below 50:
+- Broadening strategy:
+- Final retained candidate count:
+- Saturation or scope exception if final count remains below 50:
 ```
 
 ## claims_evidence_map.csv
