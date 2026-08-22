@@ -1,7 +1,7 @@
 ---
 name: review-loop-workflow
 description: Run a disciplined literature-review loop for planning, searching, downloading handoff, PDF processing, knowledge-base construction, manuscript drafting, mock peer review, targeted revision, final scoring, and Word/figure output. Use when the user asks to create, run, resume, audit, or deploy a review workflow, especially Chinese requests such as 综述 loop、综述工作流、文献调研到写作闭环、模拟审稿、85分闸门、最终输出 Word.
-version: 1.1.0
+version: 1.2.0
 author: local-codex
 ---
 
@@ -21,10 +21,29 @@ At the start of each stage, state:
 4. `预期输出：...`
 5. `进入下一阶段的检查标准：...`
 
-If an expected specialist skill is unavailable, state that clearly and either:
+If an expected specialist skill is unavailable, state that clearly and first follow the Missing Specialist Skill Installation Gate below.
 
-- ask the user whether to continue with a named fallback, or
-- continue only with a documented fallback when the task is low-risk and no claims will be fabricated.
+### Missing Specialist Skill Installation Gate
+
+If a required or preferred specialist skill for the current stage is missing, not installed, or cannot be loaded, do not silently proceed with fallback and do not execute the stage freehand.
+
+First invoke or recommend `skill-installer` to install the missing skill when a trusted source is available, such as the curated skill list or a user-provided GitHub repository/path. Record:
+
+- missing skill name;
+- stage that requires it;
+- installation source or reason no trusted source is available;
+- install result;
+- user's decision, if confirmation is required.
+
+Only use a fallback after one of these installation outcomes is documented:
+
+- installation is unavailable because no trusted source is known;
+- installation fails and the failure is documented;
+- the user explicitly declines installation;
+
+Even then, fallback is allowed only when the task is low-risk, the fallback is named, and no claims, citations, metadata, or evidence will be fabricated.
+
+When fallback is allowed, clearly state the fallback path and either ask the user whether to continue or document why continuing is low-risk.
 
 Never fabricate literature, DOI metadata, PDF-derived facts, reviewer comments, scores, or claim-evidence support.
 

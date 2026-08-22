@@ -17,6 +17,7 @@ Agent behavior:
 2. State the current stage and the specialist skills required.
 3. Create the workflow folder and scaffold files.
 4. Do not run literature search, PDF processing, writing, review, or revision without declaring the relevant specialist skills.
+5. If a required specialist skill is missing, use or recommend `skill-installer` before considering fallback.
 
 ## Resume Existing Project
 
@@ -61,6 +62,9 @@ If fewer than 50 papers remain after broadening, continue only with a documented
 
 If a specialist skill is unavailable:
 
+- First try to use or recommend `skill-installer` when a trusted source is available.
+- Record the missing skill name, stage, installation source, install result, and user decision if confirmation is required.
+- Use fallback only if installation is unavailable, fails, or the user explicitly declines installation.
 - Search/lookup tasks: use official databases or web only with source links and dates.
 - PDF tasks: use local PDF/text extraction tools and mark extracted fields as `needs_author_check`.
 - Writing tasks: draft only from the evidence map; use placeholders for unsupported claims.
